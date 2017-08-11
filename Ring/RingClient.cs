@@ -401,7 +401,7 @@ namespace Ring
 
             var uri = DingRecordingUri.Replace("{id}", ding.Id.ToString());
 
-            var response = await SendRequestAsync(HttpMethod.Get, uri, AuthedSessionData, false, null, null);
+            var response = await SendRequestAsync(HttpMethod.Get, uri, AuthedSessionData, false);
 
             if (!response.IsSuccessStatusCode && response.StatusCode != HttpStatusCode.Found)
             {
