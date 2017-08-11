@@ -21,8 +21,10 @@ try
   // Connect to the Ring API using a Ring account username and password.
   var ring = new RingClient("username@domain.tld", "password");
   
-  // Save ring.AuthToken for future connections instead of the username and password.
-  // You can create a new connection using an auth token by calling new RingClient(authToken)
+  // Save the AuthToken for future connections instead of the Ring account username and password.
+  // You can create a new connection using an auth token by calling: new RingClient(authToken)
+  // The auth token may expire, but you can ask the user for their username and password at that point.
+  var authToken = ring.AuthToken;
   
   // Get the list of the user's devices.
   var devices = await ring.GetDevicesAsync();
