@@ -225,9 +225,11 @@ namespace Ring
                 {
                     Id = (ulong)token["id"],
                     Description = (string)token["description"],
+                    FirmwareVersion = (string)token["firmware_version"],
                     Address = (string)token["address"],
                     Latitude = (double)token["latitude"],
                     Longitude = (double)token["longitude"],
+                    TimeZone = (string)token["time_zone"],
                     BatteryLife = (int)token["battery_life"],
                     Type = DeviceType.Doorbell
                 });
@@ -299,10 +301,28 @@ namespace Ring
 
             foreach (var token in jsonArray.Children().AsJEnumerable())
             {
+                DingType type;
+
+                var kind = (string)token["kind"];
+
+                if (kind == "motion")
+                {
+                    type = DingType.Motion;
+                }
+                else if (kind == "ding")
+                {
+                    type = DingType.Ring;
+                }
+                else
+                {
+                    type = DingType.Unknown;
+                }
+
                 activeDings.Add(new ActiveDing()
                 {
                     Id = (ulong)token["id"],
-                    Device = devices.Where(d => d.Id == (ulong)token["doorbot_id"]).FirstOrDefault()
+                    Device = devices.Where(d => d.Id == (ulong)token["doorbot_id"]).FirstOrDefault(),
+                    Type = type
                 });
             }
 

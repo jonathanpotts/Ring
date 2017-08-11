@@ -14,6 +14,10 @@
         /// </summary>
         public string Description { get; set; }
         /// <summary>
+        /// The firmware version installed on the device.
+        /// </summary>
+        public string FirmwareVersion { get; set; }
+        /// <summary>
         /// The address of the device.
         /// </summary>
         public string Address { get; set; }

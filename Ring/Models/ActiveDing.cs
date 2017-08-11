@@ -13,5 +13,9 @@
         /// The Ring device that the ding originated from.
         /// </summary>
         public Device Device { get; set; }
+        /// <summary>
+        /// The type of ding that occurred.
+        /// </summary>
+        public DingType Type { get; set; }
     }
 }
