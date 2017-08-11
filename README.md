@@ -42,8 +42,8 @@ try
   // Check if there are any active dings.
   if (activeDings.Count > 0)
   {
-    // Get the type of the first active ding.
-    var activeDingType = activeDings[0].Type;
+    // Get the description of the Ring device that the first active ding occurred from.
+    var activeDingDevice = activeDings[0].Device;
   }
   
   // Get the list of the user's last 15 dings.
@@ -55,8 +55,8 @@ try
     // Get the URI of the recording of the most recent ding.
     var recordingUri = await ring.GetRecordingUriAsync(dings[0]);
     
-    // Get the description of the Ring device that the most recent ding occurred from.
-    var description = dings[0].Device.Description;
+    // Get the type of the most recent ding.
+    var dingType = dings[0].Type;
   }
 }
 catch (Exception ex)
