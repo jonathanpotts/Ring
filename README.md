@@ -37,6 +37,13 @@ try
   // Get the list of the user's active dings.
   var activeDings = await ring.GetActiveDingsAsync();
   
+  // Check if there are any active dings.
+  if (activeDings.Count > 0)
+  {
+    // Get the type of the first active ding.
+    var activeDingType = activeDings[0].Type;
+  }
+  
   // Get the list of the user's last 15 dings.
   var dings = await ring.GetDingsAsync(15);
   
