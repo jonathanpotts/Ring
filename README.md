@@ -66,4 +66,4 @@ catch (Exception ex)
 ```
 
 ## Credits
-This project was based off of [php-ring-api](https://github.com/jeroenmoors/php-ring-api) by [Jeroen Moors](https://github.com/jeroenmoors).
+This library was based off of [php-ring-api](https://github.com/jeroenmoors/php-ring-api) by [Jeroen Moors](https://github.com/jeroenmoors).
