@@ -68,7 +68,6 @@ namespace Ring
         /// </summary>
         private readonly IReadOnlyDictionary<string, string> NewSessionData = new Dictionary<string, string>()
         {
-            
             { "device[os]", "android" },
             { "device[hardware_id]", Guid.NewGuid().ToString() },
             { "device[app_brand]", "ring" },
