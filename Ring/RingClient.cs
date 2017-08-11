@@ -89,6 +89,9 @@ namespace Ring
         /// </summary>
         public string AuthToken { get; private set; }
 
+        /// <summary>
+        /// Data sent with subsequent requests to authenticate the client with the Ring API.
+        /// </summary>
         private Dictionary<string, string> AuthedSessionData
         {
             get
