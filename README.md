@@ -43,7 +43,7 @@ try
   if (activeDings.Count > 0)
   {
     // Get the description of the Ring device that the first active ding occurred from.
-    var activeDingDevice = activeDings[0].Device;
+    var activeDingDeviceDescription = activeDings[0].Device.Description;
   }
   
   // Get the list of the user's last 15 dings.
