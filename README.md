@@ -1,5 +1,5 @@
 # Ring
-An unofficial [Ring](https://ring.com) library for [.NET](https://www.microsoft.com/net). **This library is in no way endorsed by Ring nor do I represent Ring in any form.**
+An unofficial [Ring](https://ring.com) library for [.NET](https://www.microsoft.com/net). **This library is in no way endorsed by Ring nor do I represent Ring.**
 
 Uses [.NET Standard](https://github.com/dotnet/standard) and [Newtonsoft.Json](https://github.com/JamesNK/Newtonsoft.Json).
 
