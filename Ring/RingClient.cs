@@ -282,7 +282,7 @@ namespace Ring
         /// Gets a list containing the active dings that the user has access to.
         /// </summary>
         /// <returns>The list of active dings that the user has access to.</returns>
-        public async Task<List<Ding>> GetActiveDingsAsync()
+        public async Task<List<ActiveDing>> GetActiveDingsAsync()
         {
             var response = await SendRequestAsync(HttpMethod.Get, ActiveDingsUri, AuthedSessionData);
 
@@ -293,41 +293,20 @@ namespace Ring
 
             var devices = await GetDevicesAsync();
 
-            var dings = new List<Ding>();
+            var activeDings = new List<ActiveDing>();
 
             var jsonArray = JArray.Parse(await response.Content.ReadAsStringAsync());
 
             foreach (var token in jsonArray.Children().AsJEnumerable())
             {
-                DingType type;
-
-                var kind = (string)token["kind"];
-
-                if (kind == "motion")
-                {
-                    type = DingType.Motion;
-                }
-                else if (kind == "ding")
-                {
-                    type = DingType.Ring;
-                }
-                else
-                {
-                    type = DingType.Unknown;
-                }
-
-                dings.Add(new Ding()
+                activeDings.Add(new ActiveDing()
                 {
                     Id = (ulong)token["id"],
-                    CreatedAt = DateTime.Parse((string)token["created_at"]),
-                    Answered = (bool)token["answered"],
-                    RecordingIsReady = ((string)token["recording"]["status"] == "ready"),
-                    Device = devices.Where(d => d.Id == (ulong)token["doorbot"]["id"]).FirstOrDefault(),
-                    Type = type
+                    Device = devices.Where(d => d.Id == (ulong)token["doorbot_id"]).FirstOrDefault()
                 });
             }
 
-            return dings;
+            return activeDings;
         }
 
         /// <summary>
