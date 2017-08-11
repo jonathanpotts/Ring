@@ -47,7 +47,7 @@ namespace Ring
         private const string DingRecordingUri = "/clients_api/dings/{id}/recording";
 
         /// <summary>
-        /// The User-Agent header that the Ring API expects.
+        /// The User-Agent header values that the Ring API expects.
         /// </summary>
         private readonly IReadOnlyList<ProductInfoHeaderValue> UserAgentHeaderValues = new List<ProductInfoHeaderValue>()
         {
