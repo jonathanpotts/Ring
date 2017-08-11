@@ -219,62 +219,46 @@ namespace Ring
 
             var jsonObject = JObject.Parse(await response.Content.ReadAsStringAsync());
 
-            foreach (var token in jsonObject["doorbots"].Children().AsJEnumerable())
+            foreach (var kvp in jsonObject)
             {
-                devices.Add(new Device()
-                {
-                    Id = (ulong)token["id"],
-                    Description = (string)token["description"],
-                    FirmwareVersion = (string)token["firmware_version"],
-                    Address = (string)token["address"],
-                    Latitude = (double)token["latitude"],
-                    Longitude = (double)token["longitude"],
-                    TimeZone = (string)token["time_zone"],
-                    BatteryLife = (int)token["battery_life"],
-                    Type = DeviceType.Doorbell
-                });
-            }
+                DeviceType type;
 
-            foreach (var token in jsonObject["authorized_doorbots"].Children().AsJEnumerable())
-            {
-                devices.Add(new Device()
+                if (kvp.Key == "doorbots")
                 {
-                    Id = (ulong)token["id"],
-                    Description = (string)token["description"],
-                    Address = (string)token["address"],
-                    Latitude = (double)token["latitude"],
-                    Longitude = (double)token["longitude"],
-                    BatteryLife = (int)token["battery_life"],
-                    Type = DeviceType.AuthorizedDoorbell
-                });
-            }
+                    type = DeviceType.Doorbell;
+                }
+                else if (kvp.Key == "authorized_doorbots")
+                {
+                    type = DeviceType.AuthorizedDoorbell;
+                }
+                else if (kvp.Key == "chimes")
+                {
+                    type = DeviceType.Chime;
+                }
+                else if (kvp.Key == "stickup_cams")
+                {
+                    type = DeviceType.Cam;
+                }
+                else
+                {
+                    type = DeviceType.Unknown;
+                }
 
-            foreach (var token in jsonObject["chimes"].Children().AsJEnumerable())
-            {
-                devices.Add(new Device()
+                foreach (var token in kvp.Value)
                 {
-                    Id = (ulong)token["id"],
-                    Description = (string)token["description"],
-                    Address = (string)token["address"],
-                    Latitude = (double)token["latitude"],
-                    Longitude = (double)token["longitude"],
-                    BatteryLife = -1,
-                    Type = DeviceType.Chime
-                });
-            }
-
-            foreach (var token in jsonObject["stickup_cams"].Children().AsJEnumerable())
-            {
-                devices.Add(new Device()
-                {
-                    Id = (ulong)token["id"],
-                    Description = (string)token["description"],
-                    Address = (string)token["address"],
-                    Latitude = (double)token["latitude"],
-                    Longitude = (double)token["longitude"],
-                    BatteryLife = (int)token["battery_life"],
-                    Type = DeviceType.Cam
-                });
+                    devices.Add(new Device()
+                    {
+                        Id = (ulong)token["id"],
+                        Description = (string)token["description"],
+                        FirmwareVersion = (string)token["firmware_version"],
+                        Address = (string)token["address"],
+                        Latitude = (double)token["latitude"],
+                        Longitude = (double)token["longitude"],
+                        TimeZone = (string)token["time_zone"],
+                        BatteryLife = (int?)token["battery_life"] ?? -1,
+                        Type = type
+                    });
+                }
             }
 
             return devices;
@@ -299,7 +283,7 @@ namespace Ring
 
             var jsonArray = JArray.Parse(await response.Content.ReadAsStringAsync());
 
-            foreach (var token in jsonArray.Children().AsJEnumerable())
+            foreach (var token in jsonArray.Children())
             {
                 DingType type;
 
@@ -352,7 +336,7 @@ namespace Ring
 
             var jsonArray = JArray.Parse(await response.Content.ReadAsStringAsync());
             
-            foreach (var token in jsonArray.Children().AsJEnumerable())
+            foreach (var token in jsonArray.Children())
             {
                 DingType type;
 

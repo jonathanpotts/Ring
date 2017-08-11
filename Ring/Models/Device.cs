@@ -34,7 +34,7 @@
         /// </summary>
         public string TimeZone { get; set; }
         /// <summary>
-        /// The battery life of the device. If the value is greater than 100, the device is getting A/C power and this represents the mV input. If the device is a Chime, this value will always be -1 since it receives A/C power but does not save the mV input.
+        /// The battery life of the device. If the value is greater than 100, the device is getting A/C power and this represents the mV input. If the value is -1, the device does not save battery life information.
         /// </summary>
         public int BatteryLife { get; set; }
         /// <summary>
