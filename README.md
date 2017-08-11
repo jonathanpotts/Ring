@@ -55,7 +55,7 @@ try
     // Get the URI of the recording of the most recent ding.
     var recordingUri = await ring.GetRecordingUriAsync(dings[0]);
     
-    // Get the description of the Ring device that the first active ding occurred from.
+    // Get the description of the Ring device that the most recent ding occurred from.
     var dingDeviceDescription = dings[0].Device.Description;
   }
 }
