@@ -19,7 +19,7 @@ This library should work on all .NET platforms that support .NET Standard 1.4 in
 try
 {
   // Connect to the Ring API using a Ring account username and password.
-  var ring = new RingClient("username@domain.tld", "password");
+  var ring = new RingClient("username@example.com", "password");
   
   // Save the AuthToken for future connections instead of the Ring account username and password.
   // You can create a new connection using an auth token by calling: new RingClient(authToken)
