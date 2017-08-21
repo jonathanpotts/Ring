@@ -3,12 +3,12 @@
   <PropertyGroup>
     <TargetFramework>netstandard1.4</TargetFramework>
     <Authors>Jonathan Potts</Authors>
-    <Company>Jonathan Potts</Company>
+    <Company></Company>
     <Description>An unofficial Ring API for .NET. This library is in no way endorsed by Ring.</Description>
     <PackageProjectUrl>https://github.com/jonathanpotts/Ring</PackageProjectUrl>
     <PackageLicenseUrl>https://github.com/jonathanpotts/Ring/blob/master/LICENSE.md</PackageLicenseUrl>
     <RepositoryUrl>https://github.com/jonathanpotts/Ring</RepositoryUrl>
-    <GeneratePackageOnBuild>False</GeneratePackageOnBuild>
+    <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
