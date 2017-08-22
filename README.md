@@ -22,7 +22,7 @@ try
   var ring = await RingClient.CreateAsync("username@example.com", "password");
   
   // Save the AuthToken for future connections instead of the Ring account username and password.
-  // You can create a new connection using an auth token by calling: new RingClient(authToken)
+  // You can create a new connection using an auth token by calling: RingClient.CreateAsync(authToken)
   // The auth token may expire, but you can ask the user for their username and password at that point.
   var authToken = ring.AuthToken;
   
