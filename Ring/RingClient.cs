@@ -104,14 +104,70 @@ namespace Ring
         }
 
         /// <summary>
-        /// Create an authenticated connection to the Ring API using an auth token.
+        /// Create an instance without any initialization.
+        /// </summary>
+        private RingClient()
+        {
+        }
+
+        /// <summary>
+        /// Create an authenticated connection to the Ring API using an auth token. Use <see cref="CreateAsync(string)"/> to create an instance asynchronously.
         /// </summary>
         /// <param name="authToken">Ring API auth token</param>
         public RingClient(string authToken)
         {
+            Initialize(authToken).Wait();
+        }
+
+        /// <summary>
+        /// Create an authenticated connection to the Ring API using a Ring account username and password. Use <see cref="CreateAsync(string, string)"/> to create an instance asynchronously. This should only be used when an auth token has not been created or has expired.
+        /// </summary>
+        /// <param name="username">Ring account username</param>
+        /// <param name="password">Ring account password</param>
+        public RingClient(string username, string password)
+        {
+            Initialize(username, password).Wait();
+        }
+
+        /// <summary>
+        /// Asynchronously create an authenticated connection to the Ring API using an auth token.
+        /// </summary>
+        /// <param name="authToken">Ring API auth token</param>
+        /// <returns></returns>
+        public static async Task<RingClient> CreateAsync(string authToken)
+        {
+            var ringClient = new RingClient();
+
+            await ringClient.Initialize(authToken);
+
+            return ringClient;
+        }
+
+        /// <summary>
+        /// Asynchronously create an authenticated connection to the Ring API using a Ring account username and password. This should only be used when an auth token has not been created or has expired.
+        /// </summary>
+        /// <param name="username">Ring account username</param>
+        /// <param name="password">Ring account password</param>
+        /// <returns></returns>
+        public static async Task<RingClient> CreateAsync(string username, string password)
+        {
+            var ringClient = new RingClient();
+
+            await ringClient.Initialize(username, password);
+
+            return ringClient;
+        }
+
+        /// <summary>
+        /// Initialize the connection to the Ring API using an auth token.
+        /// </summary>
+        /// <param name="authToken">Ring API auth token</param>
+        /// <returns></returns>
+        private async Task Initialize(string authToken)
+        {
             AuthToken = authToken;
 
-            var response = SendRequestAsync(HttpMethod.Get, DevicesUri, AuthedSessionData).Result;
+            var response = await SendRequestAsync(HttpMethod.Get, DevicesUri, AuthedSessionData);
 
             if (!response.IsSuccessStatusCode)
             {
@@ -120,20 +176,21 @@ namespace Ring
         }
 
         /// <summary>
-        /// Create an authenticated connection to the Ring API using a Ring account username and password. This should only be used when an auth token has not been created or has expired.
+        /// Initialize the connection to the Ring API using a Ring account username and password.
         /// </summary>
         /// <param name="username">Ring account username</param>
         /// <param name="password">Ring account password</param>
-        public RingClient(string username, string password)
+        /// <returns></returns>
+        private async Task Initialize(string username, string password)
         {
-            var response = SendRequestAsync(HttpMethod.Post, NewSessionUri, NewSessionData, true, username, password).Result;
+            var response = await SendRequestAsync(HttpMethod.Post, NewSessionUri, NewSessionData, true, username, password);
 
             if (!response.IsSuccessStatusCode)
             {
                 throw new Exception("The Ring API returned the following error: " + response.ReasonPhrase);
             }
 
-            var jsonObject = JObject.Parse(response.Content.ReadAsStringAsync().Result);
+            var jsonObject = JObject.Parse(await response.Content.ReadAsStringAsync());
             var authToken = (string)jsonObject["profile"]["authentication_token"];
 
             if (authToken == null || authToken.Length <= 0)
@@ -143,7 +200,7 @@ namespace Ring
 
             AuthToken = authToken;
 
-            response = SendRequestAsync(HttpMethod.Get, DevicesUri, AuthedSessionData).Result;
+            response = await SendRequestAsync(HttpMethod.Get, DevicesUri, AuthedSessionData);
 
             if (!response.IsSuccessStatusCode)
             {
