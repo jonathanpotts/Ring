@@ -16,6 +16,11 @@ namespace Ring
     public class RingClient
     {
         /// <summary>
+        /// The absolute URI for the Ring OAuth Provider.
+        /// </summary>
+        private const string OAuthUri = "https://oauth.ring.com/oauth/token";
+        
+        /// <summary>
         /// The API version used for the Ring API.
         /// </summary>
         private const string ApiVersion = "9";
@@ -26,25 +31,25 @@ namespace Ring
         private const string ApiUri = "https://api.ring.com";
 
         /// <summary>
-        /// The relative URI used to create a new session.
+        /// The URI used to create a new session.
         /// </summary>
-        private const string NewSessionUri = "/clients_api/session";
+        private const string NewSessionUri = ApiUri + "/clients_api/session";
         /// <summary>
-        /// The relative URI used to access the user's Ring devices.
+        /// The URI used to access the user's Ring devices.
         /// </summary>
-        private const string DevicesUri = "/clients_api/ring_devices";
+        private const string DevicesUri = ApiUri + "/clients_api/ring_devices";
         /// <summary>
-        /// The relative URI used to access the user's active dings.
+        /// The URI used to access the user's active dings.
         /// </summary>
-        private const string ActiveDingsUri = "/clients_api/dings/active";
+        private const string ActiveDingsUri = ApiUri + "/clients_api/dings/active";
         /// <summary>
-        /// The relative URI used to access the user's ding history.
+        /// The URI used to access the user's ding history.
         /// </summary>
-        private const string DingHistoryUri = "/clients_api/doorbots/history";
+        private const string DingHistoryUri = ApiUri + "/clients_api/doorbots/history";
         /// <summary>
-        /// The relative URI used to access the recording of a specific ding.
+        /// The URI used to access the recording of a specific ding.
         /// </summary>
-        private const string DingRecordingUri = "/clients_api/dings/{id}/recording";
+        private const string DingRecordingUri = ApiUri + "/clients_api/dings/{id}/recording";
 
         /// <summary>
         /// The User-Agent header values that the Ring API expects.
@@ -54,6 +59,7 @@ namespace Ring
             new ProductInfoHeaderValue("Dalvik", "1.6.0"),
             new ProductInfoHeaderValue("(Linux; U; Android 4.4.4; Build/KTU84Q)")
         };
+
         /// <summary>
         /// The Accept-Encoding header values that the Ring API expects.
         /// </summary>
@@ -183,7 +189,7 @@ namespace Ring
         /// <returns></returns>
         private async Task Initialize(string username, string password)
         {
-            var response = await SendRequestAsync(HttpMethod.Post, NewSessionUri, NewSessionData, true, username, password);
+            var response = await SendRequestAsync(HttpMethod.Post, OAuthUri, NewSessionData);
 
             if (!response.IsSuccessStatusCode)
             {
@@ -212,25 +218,18 @@ namespace Ring
         /// Sends a request to the Ring API asynchronously.
         /// </summary>
         /// <param name="method">The HTTP method to use for the request.</param>
-        /// <param name="relativeUri">The relative URI to send the request to.</param>
+        /// <param name="uri">The URI to send the request to.</param>
         /// <param name="data">The data to send as part of the request.</param>
         /// <param name="autoRedirect">Specifies if the client should automatically redirect if requested.</param>
         /// <param name="username">The username used to authenticate the request when an auth token is not available.</param>
         /// <param name="password">The password used to authenticate the request when an auth token is not available.</param>
         /// <returns>The response received from the Ring API.</returns>
-        private async Task<HttpResponseMessage> SendRequestAsync(HttpMethod method, string relativeUri, IReadOnlyDictionary<string, string> data, bool autoRedirect = true, string username = null, string password = null)
+        private async Task<HttpResponseMessage> SendRequestAsync(HttpMethod method, string uri, IReadOnlyDictionary<string, string> data, bool autoRedirect = true)
         {
             var httpHandler = new HttpClientHandler();
             httpHandler.AllowAutoRedirect = autoRedirect;
 
-            if (username != null && password != null)
-            {
-                httpHandler.Credentials = new NetworkCredential(username, password);
-                httpHandler.PreAuthenticate = true;
-            }
-
             var httpClient = new HttpClient(httpHandler);
-            httpClient.BaseAddress = new Uri(ApiUri, UriKind.Absolute);
 
             httpClient.DefaultRequestHeaders.AcceptEncoding.Clear();
             foreach (var value in AcceptEncodingHeaderValues)
@@ -247,11 +246,11 @@ namespace Ring
             if (method == HttpMethod.Get)
             {
                 var queryString = "?" + await new FormUrlEncodedContent(data).ReadAsStringAsync();
-                return await httpClient.GetAsync(new Uri(relativeUri + queryString, UriKind.Relative));
+                return await httpClient.GetAsync(new Uri(uri + queryString, UriKind.Absolute));
             }
             else if (method == HttpMethod.Post)
             {
-                return await httpClient.PostAsync(new Uri(relativeUri, UriKind.Relative), new FormUrlEncodedContent(data));
+                return await httpClient.PostAsync(new Uri(uri, UriKind.Absolute), new FormUrlEncodedContent(data));
             }
             else
             {
