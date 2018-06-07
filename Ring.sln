@@ -5,6 +5,8 @@ VisualStudioVersion = 15.0.26430.16
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Ring", "Ring\Ring.csproj", "{5C65552F-D51A-4147-96CB-86961ED95B5F}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RingTest", "RingTest\RingTest.csproj", "{F5C78F3B-BCEC-4ABF-BF3B-BF99F57D295A}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -15,12 +17,15 @@ Global
 		{5C65552F-D51A-4147-96CB-86961ED95B5F}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{5C65552F-D51A-4147-96CB-86961ED95B5F}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{5C65552F-D51A-4147-96CB-86961ED95B5F}.Release|Any CPU.Build.0 = Release|Any CPU
-		{CCBA8381-4840-4DDA-B8E4-0467CBD1EF09}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{CCBA8381-4840-4DDA-B8E4-0467CBD1EF09}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{CCBA8381-4840-4DDA-B8E4-0467CBD1EF09}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{CCBA8381-4840-4DDA-B8E4-0467CBD1EF09}.Release|Any CPU.Build.0 = Release|Any CPU
+		{F5C78F3B-BCEC-4ABF-BF3B-BF99F57D295A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F5C78F3B-BCEC-4ABF-BF3B-BF99F57D295A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{F5C78F3B-BCEC-4ABF-BF3B-BF99F57D295A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{F5C78F3B-BCEC-4ABF-BF3B-BF99F57D295A}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {BF425EDA-6FC0-4342-853E-0B738089B120}
 	EndGlobalSection
 EndGlobal

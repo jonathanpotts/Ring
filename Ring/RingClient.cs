@@ -4,6 +4,7 @@ using System.Linq;
 using System.Net;
 using System.Net.Http;
 using System.Net.Http.Headers;
+using System.Text;
 using System.Threading.Tasks;
 using Newtonsoft.Json.Linq;
 using Ring.Models;
@@ -31,25 +32,25 @@ namespace Ring
         private const string ApiUri = "https://api.ring.com";
 
         /// <summary>
-        /// The URI used to create a new session.
+        /// The relative URI used to create a new session.
         /// </summary>
-        private const string NewSessionUri = ApiUri + "/clients_api/session";
+        private const string NewSessionUri = "/clients_api/session";
         /// <summary>
-        /// The URI used to access the user's Ring devices.
+        /// The relative URI used to access the user's Ring devices.
         /// </summary>
-        private const string DevicesUri = ApiUri + "/clients_api/ring_devices";
+        private const string DevicesUri = "/clients_api/ring_devices";
         /// <summary>
-        /// The URI used to access the user's active dings.
+        /// The relative URI used to access the user's active dings.
         /// </summary>
-        private const string ActiveDingsUri = ApiUri + "/clients_api/dings/active";
+        private const string ActiveDingsUri = "/clients_api/dings/active";
         /// <summary>
-        /// The URI used to access the user's ding history.
+        /// The relative URI used to access the user's ding history.
         /// </summary>
-        private const string DingHistoryUri = ApiUri + "/clients_api/doorbots/history";
+        private const string DingHistoryUri = "/clients_api/doorbots/history";
         /// <summary>
-        /// The URI used to access the recording of a specific ding.
+        /// The relative URI used to access the recording of a specific ding.
         /// </summary>
-        private const string DingRecordingUri = ApiUri + "/clients_api/dings/{id}/recording";
+        private const string DingRecordingUri = "/clients_api/dings/{id}/recording";
 
         /// <summary>
         /// The User-Agent header values that the Ring API expects.
@@ -70,24 +71,9 @@ namespace Ring
         };
 
         /// <summary>
-        /// Data sent with the new session request to authenticate the client with the Ring API.
+        /// JSON data sent with the new session request to authenticate the client with the Ring API.
         /// </summary>
-        private readonly IReadOnlyDictionary<string, string> NewSessionData = new Dictionary<string, string>()
-        {
-            { "device[os]", "android" },
-            { "device[hardware_id]", Guid.NewGuid().ToString() },
-            { "device[app_brand]", "ring" },
-            { "device[metadata][device_model]", "Visual Studio Emulator for Android" },
-            { "device[metadata][resolution]", "600x800" },
-            { "device[metadata][app_version]", "1.7.29" },
-            { "device[metadata][app_installation_date]", "" },
-            { "device[metadata][os_version]", "4.4.4" },
-            { "device[metadata][manufacturer]", "Microsoft" },
-            { "device[metadata][is_tablet]", "true" },
-            { "device[metadata][linphone_initialized]", "true" },
-            { "device[metadata][language]", "en" },
-            { "api_version", ApiVersion }
-        };
+        private readonly string NewSessionJson = $"{{ \"device\": {{ \"hardware_id\": \"{Guid.NewGuid()}\", \"metadata\": {{ \"api_version\": \"{ApiVersion}\" }}, \"os\": \"android\" }} }}";
 
         /// <summary>
         /// The auth token used to authenticate requests against the Ring API.
@@ -189,7 +175,7 @@ namespace Ring
         /// <returns></returns>
         private async Task Initialize(string username, string password)
         {
-            var response = await SendRequestAsync(HttpMethod.Post, OAuthUri, NewSessionData);
+            var response = await Authorize(username, password);
 
             if (!response.IsSuccessStatusCode)
             {
@@ -218,18 +204,18 @@ namespace Ring
         /// Sends a request to the Ring API asynchronously.
         /// </summary>
         /// <param name="method">The HTTP method to use for the request.</param>
-        /// <param name="uri">The URI to send the request to.</param>
+        /// <param name="relativeUri">The relative URI to send the request to.</param>
         /// <param name="data">The data to send as part of the request.</param>
         /// <param name="autoRedirect">Specifies if the client should automatically redirect if requested.</param>
-        /// <param name="username">The username used to authenticate the request when an auth token is not available.</param>
-        /// <param name="password">The password used to authenticate the request when an auth token is not available.</param>
         /// <returns>The response received from the Ring API.</returns>
-        private async Task<HttpResponseMessage> SendRequestAsync(HttpMethod method, string uri, IReadOnlyDictionary<string, string> data, bool autoRedirect = true)
+        private async Task<HttpResponseMessage> SendRequestAsync(HttpMethod method, string relativeUri, IReadOnlyDictionary<string, string> data, bool autoRedirect = true)
         {
             var httpHandler = new HttpClientHandler();
             httpHandler.AllowAutoRedirect = autoRedirect;
+            httpHandler.AutomaticDecompression = DecompressionMethods.GZip | DecompressionMethods.Deflate;
 
             var httpClient = new HttpClient(httpHandler);
+            httpClient.BaseAddress = new Uri(ApiUri, UriKind.Absolute);
 
             httpClient.DefaultRequestHeaders.AcceptEncoding.Clear();
             foreach (var value in AcceptEncodingHeaderValues)
@@ -246,16 +232,62 @@ namespace Ring
             if (method == HttpMethod.Get)
             {
                 var queryString = "?" + await new FormUrlEncodedContent(data).ReadAsStringAsync();
-                return await httpClient.GetAsync(new Uri(uri + queryString, UriKind.Absolute));
+                return await httpClient.GetAsync(new Uri(relativeUri + queryString, UriKind.Relative));
             }
             else if (method == HttpMethod.Post)
             {
-                return await httpClient.PostAsync(new Uri(uri, UriKind.Absolute), new FormUrlEncodedContent(data));
+                return await httpClient.PostAsync(new Uri(relativeUri, UriKind.Relative), new FormUrlEncodedContent(data));
             }
             else
             {
                 throw new NotImplementedException();
             }
+        }
+
+        /// <summary>
+        /// Sends an authentication request to the Ring OAuth provider and API asynchronously.
+        /// </summary>
+        /// <param name="username">The username used to authenticate.</param>
+        /// <param name="password">The password used to authenticate.</param>
+        /// <returns>The response received from the Ring API.</returns>
+        private async Task<HttpResponseMessage> Authorize(string username, string password)
+        {
+            var httpHandler = new HttpClientHandler();
+            httpHandler.AllowAutoRedirect = true;
+            httpHandler.AutomaticDecompression = DecompressionMethods.GZip | DecompressionMethods.Deflate;
+
+            var httpClient = new HttpClient(httpHandler);
+
+            httpClient.DefaultRequestHeaders.AcceptEncoding.Clear();
+            foreach (var value in AcceptEncodingHeaderValues)
+            {
+                httpClient.DefaultRequestHeaders.AcceptEncoding.Add(value);
+            }
+
+            httpClient.DefaultRequestHeaders.UserAgent.Clear();
+            foreach (var value in UserAgentHeaderValues)
+            {
+                httpClient.DefaultRequestHeaders.UserAgent.Add(value);
+            }
+
+            string json = $"{{ \"client_id\": \"ring_official_android\", \"grant_type\": \"password\", \"password\": \"{password}\", \"scope\": \"client\", \"username\": \"{username}\" }}";
+
+            var response = await httpClient.PostAsync(OAuthUri, new StringContent(json, Encoding.UTF8, "application/json"));
+
+            if (!response.IsSuccessStatusCode)
+            {
+                throw new Exception("The Ring OAuth provider returned the following error: " + response.ReasonPhrase);
+            }
+
+            var jsonObject = JObject.Parse(await response.Content.ReadAsStringAsync());
+            var accessToken = (string)jsonObject["access_token"];
+
+            httpClient = new HttpClient(httpHandler);
+
+            httpClient.BaseAddress = new Uri(ApiUri, UriKind.Absolute);
+            httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", accessToken);
+
+            return await httpClient.PostAsync(new Uri(NewSessionUri, UriKind.Relative), new StringContent(NewSessionJson, Encoding.UTF8, "application/json"));
         }
 
         /// <summary>

@@ -7,9 +7,11 @@
     <Description>An unofficial Ring API for .NET. This library is in no way endorsed by Ring.</Description>
     <PackageProjectUrl>https://github.com/jonathanpotts/Ring</PackageProjectUrl>
     <PackageLicenseUrl>https://github.com/jonathanpotts/Ring/blob/master/LICENSE.md</PackageLicenseUrl>
-    <RepositoryUrl>https://github.com/jonathanpotts/Ring</RepositoryUrl>
+    <RepositoryUrl>https://github.com/jonathanpotts/Ring.git</RepositoryUrl>
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
-    <Version>1.1.1</Version>
+    <Version>2.0</Version>
+    <PackageReleaseNotes>Updated to support new authentication method.</PackageReleaseNotes>
+    <RepositoryType>git</RepositoryType>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
