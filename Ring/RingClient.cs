@@ -53,24 +53,6 @@ namespace Ring
         private const string DingRecordingUri = "/clients_api/dings/{id}/recording";
 
         /// <summary>
-        /// The User-Agent header values that the Ring API expects.
-        /// </summary>
-        private readonly IReadOnlyList<ProductInfoHeaderValue> UserAgentHeaderValues = new List<ProductInfoHeaderValue>()
-        {
-            new ProductInfoHeaderValue("Dalvik", "1.6.0"),
-            new ProductInfoHeaderValue("(Linux; U; Android 4.4.4; Build/KTU84Q)")
-        };
-
-        /// <summary>
-        /// The Accept-Encoding header values that the Ring API expects.
-        /// </summary>
-        private readonly IReadOnlyList<StringWithQualityHeaderValue> AcceptEncodingHeaderValues = new List<StringWithQualityHeaderValue>()
-        {
-            new StringWithQualityHeaderValue("gzip"),
-            new StringWithQualityHeaderValue("deflate")
-        };
-
-        /// <summary>
         /// JSON data sent with the new session request to authenticate the client with the Ring API.
         /// </summary>
         private readonly string NewSessionJson = $"{{ \"device\": {{ \"hardware_id\": \"{Guid.NewGuid()}\", \"metadata\": {{ \"api_version\": \"{ApiVersion}\" }}, \"os\": \"android\" }} }}";
@@ -217,18 +199,6 @@ namespace Ring
             var httpClient = new HttpClient(httpHandler);
             httpClient.BaseAddress = new Uri(ApiUri, UriKind.Absolute);
 
-            httpClient.DefaultRequestHeaders.AcceptEncoding.Clear();
-            foreach (var value in AcceptEncodingHeaderValues)
-            {
-                httpClient.DefaultRequestHeaders.AcceptEncoding.Add(value);
-            }
-
-            httpClient.DefaultRequestHeaders.UserAgent.Clear();
-            foreach (var value in UserAgentHeaderValues)
-            {
-                httpClient.DefaultRequestHeaders.UserAgent.Add(value);
-            }
-
             if (method == HttpMethod.Get)
             {
                 var queryString = "?" + await new FormUrlEncodedContent(data).ReadAsStringAsync();
@@ -257,18 +227,6 @@ namespace Ring
             httpHandler.AutomaticDecompression = DecompressionMethods.GZip | DecompressionMethods.Deflate;
 
             var httpClient = new HttpClient(httpHandler);
-
-            httpClient.DefaultRequestHeaders.AcceptEncoding.Clear();
-            foreach (var value in AcceptEncodingHeaderValues)
-            {
-                httpClient.DefaultRequestHeaders.AcceptEncoding.Add(value);
-            }
-
-            httpClient.DefaultRequestHeaders.UserAgent.Clear();
-            foreach (var value in UserAgentHeaderValues)
-            {
-                httpClient.DefaultRequestHeaders.UserAgent.Add(value);
-            }
 
             string json = $"{{ \"client_id\": \"ring_official_android\", \"grant_type\": \"password\", \"password\": \"{password}\", \"scope\": \"client\", \"username\": \"{username}\" }}";
 

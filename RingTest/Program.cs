@@ -56,7 +56,7 @@ namespace RingTest
                     // Get the description of the Ring device that the most recent ding occurred from.
                     var dingDeviceDescription = dings[0].Device.Description;
 
-                    Console.WriteLine($"Ding by {dingDeviceDescription}: {recordingUri}");
+                    Console.WriteLine($"Ding from {dingDeviceDescription}: {recordingUri}");
                 }
             }
             catch (Exception ex)
