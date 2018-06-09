@@ -1,0 +1,14 @@
+﻿<div class="mr-auto"></div>
+<ul class="navbar-nav">
+    <li class="nav-item">
+        @if (User.Identity.IsAuthenticated)
+        {
+
+            <a class="nav-link" asp-area="" asp-controller="Account" asp-action="Logout">Logout</a>
+        }
+        else
+        {
+            <a class="nav-link" asp-area="" asp-controller="Account" asp-action="Login">Login</a>
+        }
+    </li>
+</ul>

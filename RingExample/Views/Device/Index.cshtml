@@ -1,3 +1,26 @@
-﻿@{
+﻿@model List<Device>
+@{
     ViewData["Title"] = "Devices";
 }
+
+<h1>Devices</h1>
+
+<div class="py-2"></div>
+
+<table class="table table-hover">
+    <thead>
+        <tr>
+            <th scope="col">Name</th>
+            <th scope="col">Address</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var device in Model.OrderBy(e => e.Description))
+        {
+            <tr>
+                <td>@device.Description</td>
+                <td>@device.Address</td>
+            </tr>
+        }
+    </tbody>
+</table>

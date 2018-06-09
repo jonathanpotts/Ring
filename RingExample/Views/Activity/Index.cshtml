@@ -3,8 +3,6 @@
     ViewData["Title"] = "Activity";
 }
 
-<div class="py-2"></div>
-
 <h1>Activity</h1>
 
 <div class="py-2"></div>
@@ -15,16 +13,25 @@
             <th scope="col">Type</th>
             <th scope="col">Device</th>
             <th scope="col">Occurred At</th>
+            <th scope="col">Recording</th>
         </tr>
     </thead>
     <tbody>
         @foreach (var ding in Model.OrderByDescending(e => e.CreatedAt))
         {
-            <tr>
-                <td>@ding.Type</td>
-                <td>@ding.Device.Description</td>
-                <td>@ding.CreatedAt.ToString()</td>
-            </tr>
+        <tr>
+            <td>@ding.Type</td>
+            <td>@ding.Device.Description</td>
+            <td>@ding.CreatedAt.ToString()</td>
+            @if (ding.RecordingIsReady)
+            {
+                <td><a asp-action="Recording" asp-route-id="@ding.Id">View</a></td>
+            }
+            else
+            {
+                <td>Not Ready</td>
+            }
+        </tr>
         }
     </tbody>
 </table>
