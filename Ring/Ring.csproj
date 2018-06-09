@@ -9,8 +9,8 @@
     <PackageLicenseUrl>https://github.com/jonathanpotts/Ring/blob/master/LICENSE.md</PackageLicenseUrl>
     <RepositoryUrl>https://github.com/jonathanpotts/Ring.git</RepositoryUrl>
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
-    <Version>2.0.1</Version>
-    <PackageReleaseNotes>Removed extraneous data no longer required by the Ring API.</PackageReleaseNotes>
+    <Version>2.0.2</Version>
+    <PackageReleaseNotes>Changed Unauthorized errors to use SecurityException.</PackageReleaseNotes>
     <RepositoryType>git</RepositoryType>
   </PropertyGroup>
 

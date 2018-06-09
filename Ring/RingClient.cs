@@ -4,6 +4,7 @@ using System.Linq;
 using System.Net;
 using System.Net.Http;
 using System.Net.Http.Headers;
+using System.Security;
 using System.Text;
 using System.Threading.Tasks;
 using Newtonsoft.Json.Linq;
@@ -145,7 +146,14 @@ namespace Ring
 
             if (!response.IsSuccessStatusCode)
             {
-                throw new Exception("The Ring API returned the following error: " + response.ReasonPhrase);
+                if (response.StatusCode == HttpStatusCode.Unauthorized)
+                {
+                    throw new SecurityException("The Ring API returned the following error: " + response.ReasonPhrase);
+                }
+                else
+                {
+                    throw new Exception("The Ring API returned the following error: " + response.ReasonPhrase);
+                }
             }
         }
 
@@ -161,7 +169,14 @@ namespace Ring
 
             if (!response.IsSuccessStatusCode)
             {
-                throw new Exception("The Ring API returned the following error: " + response.ReasonPhrase);
+                if (response.StatusCode == HttpStatusCode.Unauthorized)
+                {
+                    throw new SecurityException("The Ring API returned the following error: " + response.ReasonPhrase);
+                }
+                else
+                {
+                    throw new Exception("The Ring API returned the following error: " + response.ReasonPhrase);
+                }
             }
 
             var jsonObject = JObject.Parse(await response.Content.ReadAsStringAsync());
@@ -169,7 +184,7 @@ namespace Ring
 
             if (authToken == null || authToken.Length <= 0)
             {
-                throw new Exception("The Ring API did not return the auth token.");
+                throw new SecurityException("The Ring API did not return the auth token.");
             }
 
             AuthToken = authToken;
@@ -178,7 +193,14 @@ namespace Ring
 
             if (!response.IsSuccessStatusCode)
             {
-                throw new Exception("The Ring API returned the following error: " + response.ReasonPhrase);
+                if (response.StatusCode == HttpStatusCode.Unauthorized)
+                {
+                    throw new SecurityException("The Ring API returned the following error: " + response.ReasonPhrase);
+                }
+                else
+                {
+                    throw new Exception("The Ring API returned the following error: " + response.ReasonPhrase);
+                }
             }
         }
 
@@ -234,7 +256,14 @@ namespace Ring
 
             if (!response.IsSuccessStatusCode)
             {
-                throw new Exception("The Ring OAuth provider returned the following error: " + response.ReasonPhrase);
+                if (response.StatusCode == HttpStatusCode.Unauthorized)
+                {
+                    throw new SecurityException("The Ring OAuth provider returned the following error: " + response.ReasonPhrase);
+                }
+                else
+                {
+                    throw new Exception("The Ring OAuth provider returned the following error: " + response.ReasonPhrase);
+                }
             }
 
             var jsonObject = JObject.Parse(await response.Content.ReadAsStringAsync());
@@ -258,7 +287,14 @@ namespace Ring
 
             if (!response.IsSuccessStatusCode)
             {
-                throw new Exception("The Ring API returned the following error: " + response.ReasonPhrase);
+                if (response.StatusCode == HttpStatusCode.Unauthorized)
+                {
+                    throw new SecurityException("The Ring API returned the following error: " + response.ReasonPhrase);
+                }
+                else
+                {
+                    throw new Exception("The Ring API returned the following error: " + response.ReasonPhrase);
+                }
             }
 
             var devices = new List<Device>();
@@ -320,7 +356,14 @@ namespace Ring
 
             if (!response.IsSuccessStatusCode)
             {
-                throw new Exception("The Ring API returned the following error: " + response.ReasonPhrase);
+                if (response.StatusCode == HttpStatusCode.Unauthorized)
+                {
+                    throw new SecurityException("The Ring API returned the following error: " + response.ReasonPhrase);
+                }
+                else
+                {
+                    throw new Exception("The Ring API returned the following error: " + response.ReasonPhrase);
+                }
             }
 
             var devices = await GetDevicesAsync();
@@ -373,7 +416,14 @@ namespace Ring
 
             if (!response.IsSuccessStatusCode)
             {
-                throw new Exception("The Ring API returned the following error: " + response.ReasonPhrase);
+                if (response.StatusCode == HttpStatusCode.Unauthorized)
+                {
+                    throw new SecurityException("The Ring API returned the following error: " + response.ReasonPhrase);
+                }
+                else
+                {
+                    throw new Exception("The Ring API returned the following error: " + response.ReasonPhrase);
+                }
             }
 
             var devices = await GetDevicesAsync();
@@ -433,7 +483,14 @@ namespace Ring
 
             if (!response.IsSuccessStatusCode && response.StatusCode != HttpStatusCode.Found)
             {
-                throw new Exception("The Ring API returned the following error: " + response.ReasonPhrase);
+                if (response.StatusCode == HttpStatusCode.Unauthorized)
+                {
+                    throw new SecurityException("The Ring API returned the following error: " + response.ReasonPhrase);
+                }
+                else
+                {
+                    throw new Exception("The Ring API returned the following error: " + response.ReasonPhrase);
+                }
             }
 
             return response.Headers.Location;
