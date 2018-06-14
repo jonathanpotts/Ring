@@ -13,6 +13,10 @@ This library should work on all .NET platforms that support .NET Standard 1.4 in
 * [Xamarin.Android](https://github.com/xamarin/xamarin-android) 7.0
 * [Universal Windows Platform](https://docs.microsoft.com/en-us/windows/uwp/index) 10.0
 
+## Example Implementation
+
+An example implementation can be found in the [RingExample](https://github.com/jonathanpotts/Ring/tree/master/RingExample) directory and it can be tested at: https://ring-webapp.azurewebsites.net/.
+
 ## Example Usage
 
 ```csharp
