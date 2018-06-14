@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Ring;
+using RingExample.Models;
 
 namespace RingExample.Controllers
 {
@@ -37,8 +38,8 @@ namespace RingExample.Controllers
             }
         }
 
-        [Route("recording/{id}")]
-        public async Task<IActionResult> Recording(ulong id)
+        [Route("recording/{id}/{type}/{deviceName}/{createdAt}")]
+        public async Task<IActionResult> Recording(ulong id, string type, string deviceName, int createdAt)
         {
             RingClient ring;
 
@@ -54,10 +55,15 @@ namespace RingExample.Controllers
 
             try
             {
-                var ding = new Ring.Models.Ding() { Id = id, RecordingIsReady = true };
-                var recordingUri = await ring.GetRecordingUriAsync(ding);
+                RecordingViewModel model = new RecordingViewModel();
 
-                return View(recordingUri);
+                var ding = new Ring.Models.Ding() { Id = id, RecordingIsReady = true };
+                model.RecordingUri = await ring.GetRecordingUriAsync(ding);
+                model.Type = type;
+                model.DeviceName = deviceName;
+                model.CreatedAt = new DateTime(1970, 1, 1, 0, 0, 0).AddSeconds(createdAt);
+
+                return View(model);
             }
             catch
             {

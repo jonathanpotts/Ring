@@ -12,26 +12,50 @@
         <tr>
             <th scope="col">Type</th>
             <th scope="col">Device</th>
-            <th scope="col">Occurred At</th>
+            <th scope="col">Occurred</th>
             <th scope="col">Recording</th>
         </tr>
     </thead>
     <tbody>
         @foreach (var ding in Model.OrderByDescending(e => e.CreatedAt))
         {
-        <tr>
-            <td>@ding.Type</td>
-            <td>@ding.Device.Description</td>
-            <td>@ding.CreatedAt.ToString()</td>
-            @if (ding.RecordingIsReady)
-            {
-                <td><a asp-action="Recording" asp-route-id="@ding.Id">View</a></td>
-            }
-            else
-            {
-                <td>Not Ready</td>
-            }
-        </tr>
+            var timeSpan = DateTime.UtcNow - ding.CreatedAt;
+
+            <tr>
+                <td>@ding.Type</td>
+                <td>@ding.Device.Description</td>
+                <td>
+                    @if (timeSpan.Days > 0)
+                    {
+                        @timeSpan.Days<text>d, </text>
+                    }
+
+                    @if (timeSpan.Hours > 0)
+                    {
+                        @timeSpan.Hours<text>h, </text>
+                    }
+
+                    @if (timeSpan.Minutes > 0)
+                    {
+                        @timeSpan.Minutes<text>m, </text>
+                    }
+
+                    @if (timeSpan.Seconds > 0)
+                    {
+                        @timeSpan.Seconds<text>s </text> 
+                    }
+
+                    ago (@ding.CreatedAt UTC)
+                </td>
+                @if (ding.RecordingIsReady)
+                {
+                    <td><a asp-action="Recording" asp-route-id="@ding.Id" asp-route-type="@ding.Type" asp-route-deviceName="@ding.Device.Description" asp-route-createdAt="@((int)Math.Floor((ding.CreatedAt - new DateTime(1970, 1, 1, 0, 0, 0)).TotalSeconds))">View</a></td>
+                }
+                else
+                {
+                    <td>Not Ready</td>
+                }
+            </tr>
         }
     </tbody>
 </table>

@@ -1,14 +1,14 @@
-﻿@model Uri
+﻿@model RecordingViewModel
 @{
-    ViewData["Title"] = "Recording";
+    ViewData["Title"] = $"{Model.Type} at {Model.DeviceName} ({Model.CreatedAt} UTC)";
 }
 
-<h1>Recording</h1>
+<h1>@ViewData["Title"]</h1>
 
 <div class="py-2"></div>
 
 <div class="embed-responsive embed-responsive-16by9">
     <video class="embed-responsive-item" controls autoplay>
-        <source src="@Model" type="video/mp4">
+        <source src="@Model.RecordingUri" type="video/mp4">
     </video>
 </div>
