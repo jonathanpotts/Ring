@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
 using System.Net;
 using System.Net.Http;
@@ -21,7 +22,7 @@ namespace Ring
         /// The absolute URI for the Ring OAuth Provider.
         /// </summary>
         private const string OAuthUri = "https://oauth.ring.com/oauth/token";
-        
+
         /// <summary>
         /// The API version used for the Ring API.
         /// </summary>
@@ -431,7 +432,7 @@ namespace Ring
             var dings = new List<Ding>();
 
             var jsonArray = JArray.Parse(await response.Content.ReadAsStringAsync());
-            
+
             foreach (var token in jsonArray.Children())
             {
                 DingType type;
@@ -454,7 +455,7 @@ namespace Ring
                 dings.Add(new Ding()
                 {
                     Id = (ulong)token["id"],
-                    CreatedAt = DateTime.Parse((string)token["created_at"]),
+                    CreatedAt = DateTime.Parse((string) token["created_at"], CultureInfo.InvariantCulture, DateTimeStyles.AssumeLocal),
                     Answered = (bool)token["answered"],
                     RecordingIsReady = ((string)token["recording"]["status"] == "ready"),
                     Device = devices.Where(d => d.Id == (ulong)token["doorbot"]["id"]).FirstOrDefault(),
