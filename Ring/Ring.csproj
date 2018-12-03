@@ -6,12 +6,13 @@
     <Company></Company>
     <Description>An unofficial Ring API for .NET. This library is in no way endorsed by Ring.</Description>
     <PackageProjectUrl>https://github.com/jonathanpotts/Ring</PackageProjectUrl>
-    <PackageLicenseUrl>https://github.com/jonathanpotts/Ring/blob/master/LICENSE.md</PackageLicenseUrl>
+    <PackageLicenseUrl></PackageLicenseUrl>
     <RepositoryUrl>https://github.com/jonathanpotts/Ring.git</RepositoryUrl>
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
-    <Version>2.0.2</Version>
+    <Version>2.0.3</Version>
     <PackageReleaseNotes>Changed Unauthorized errors to use SecurityException.</PackageReleaseNotes>
     <RepositoryType>git</RepositoryType>
+    <AssemblyVersion>2.0.3.0</AssemblyVersion>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
@@ -23,7 +24,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="Newtonsoft.Json" Version="10.0.3" />
+    <PackageReference Include="Newtonsoft.Json" Version="12.0.1" />
   </ItemGroup>
 
 </Project>

@@ -36,7 +36,7 @@
                         <a class="nav-link" asp-area="" asp-controller="Device" asp-action="Index">Devices</a>
                     </li>
                 </ul>
-                @Html.Partial("_LoginPartial")
+                @await Html.PartialAsync("_LoginPartial")
             </div>
         </div>
     </nav>
