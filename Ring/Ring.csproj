@@ -2,7 +2,7 @@
 
   <PropertyGroup>
     <TargetFramework>netstandard1.4</TargetFramework>
-    <Authors>Jonathan Potts</Authors>
+    <Authors>Jonathan Potts and contributors</Authors>
     <Company></Company>
     <Description>An unofficial Ring API for .NET. This library is in no way endorsed by Ring.</Description>
     <PackageProjectUrl>https://github.com/jonathanpotts/Ring</PackageProjectUrl>
@@ -13,6 +13,8 @@
     <PackageReleaseNotes>Added auth bearer token to header for all queries now that the Ring API requires it.</PackageReleaseNotes>
     <RepositoryType>git</RepositoryType>
     <AssemblyVersion>2.0.4.0</AssemblyVersion>
+    <PackageLicenseFile>LICENSE.md</PackageLicenseFile>
+    <Copyright>2007-2009 Jonathan Potts and contributors</Copyright>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
@@ -25,6 +27,13 @@
 
   <ItemGroup>
     <PackageReference Include="Newtonsoft.Json" Version="12.0.1" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Include="..\LICENSE.md">
+      <Pack>True</Pack>
+      <PackagePath></PackagePath>
+    </None>
   </ItemGroup>
 
 </Project>
