@@ -65,6 +65,11 @@ namespace Ring
         public string AuthToken { get; private set; }
 
         /// <summary>
+        /// All queries now require a bearer token to avoid 401s
+        /// </summary>
+        private string AccessToken;
+
+        /// <summary>
         /// Data sent with subsequent requests to authenticate the client with the Ring API.
         /// </summary>
         private Dictionary<string, string> AuthedSessionData
@@ -221,6 +226,7 @@ namespace Ring
 
             var httpClient = new HttpClient(httpHandler);
             httpClient.BaseAddress = new Uri(ApiUri, UriKind.Absolute);
+            httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", AccessToken);
 
             if (method == HttpMethod.Get)
             {
@@ -268,12 +274,12 @@ namespace Ring
             }
 
             var jsonObject = JObject.Parse(await response.Content.ReadAsStringAsync());
-            var accessToken = (string)jsonObject["access_token"];
+            AccessToken = (string)jsonObject["access_token"];
 
             httpClient = new HttpClient(httpHandler);
 
             httpClient.BaseAddress = new Uri(ApiUri, UriKind.Absolute);
-            httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", accessToken);
+            httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", AccessToken);
 
             return await httpClient.PostAsync(new Uri(NewSessionUri, UriKind.Relative), new StringContent(NewSessionJson, Encoding.UTF8, "application/json"));
         }

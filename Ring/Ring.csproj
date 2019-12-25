@@ -9,10 +9,10 @@
     <PackageLicenseUrl></PackageLicenseUrl>
     <RepositoryUrl>https://github.com/jonathanpotts/Ring.git</RepositoryUrl>
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
-    <Version>2.0.3</Version>
-    <PackageReleaseNotes>Changed Unauthorized errors to use SecurityException.</PackageReleaseNotes>
+    <Version>2.0.4</Version>
+    <PackageReleaseNotes>Added auth bearer token to header for all queries now that the Ring API requires it.</PackageReleaseNotes>
     <RepositoryType>git</RepositoryType>
-    <AssemblyVersion>2.0.3.0</AssemblyVersion>
+    <AssemblyVersion>2.0.4.0</AssemblyVersion>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
