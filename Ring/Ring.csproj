@@ -9,12 +9,12 @@
     <PackageLicenseUrl></PackageLicenseUrl>
     <RepositoryUrl>https://github.com/jonathanpotts/Ring.git</RepositoryUrl>
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
-    <Version>2.0.4</Version>
+    <Version>2.0.5</Version>
     <PackageReleaseNotes>Added auth bearer token to header for all queries now that the Ring API requires it.</PackageReleaseNotes>
     <RepositoryType>git</RepositoryType>
-    <AssemblyVersion>2.0.4.0</AssemblyVersion>
+    <AssemblyVersion>2.0.5.0</AssemblyVersion>
     <PackageLicenseFile>LICENSE.md</PackageLicenseFile>
-    <Copyright>2007-2009 Jonathan Potts and contributors</Copyright>
+    <Copyright>2017-2020 Jonathan Potts and contributors</Copyright>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
