@@ -1,6 +1,6 @@
 # Ring
 
-[![nuget](https://img.shields.io/nuget/dt/Ring?label=nuget%20downloads)](https://www.nuget.org/packages/Ring/)
+[![nuget downloads](https://img.shields.io/nuget/dt/Ring?label=nuget%20downloads)](https://www.nuget.org/packages/Ring/)
 
 An unofficial [Ring](https://ring.com) library for [.NET](https://www.microsoft.com/net). **This library is in no way endorsed by Ring nor do I represent Ring.**
 
